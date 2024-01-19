@@ -1,0 +1,54 @@
+
+<?php
+ $user= $_SESSION['user'];
+if(isset($_POST['them'])){
+  // Lấy dữ liệu từ form
+  $t_ten = $_POST['ten'];
+  $t_diachi = $_POST['diachi'];
+  $t_sdt = $_POST['sdt'];
+  $t_lat = $_POST['vido'];
+  $t_long = $_POST['kinhdo'];
+  $ct_ma = $user['ct_ma'];
+  $l_ma = 1;
+  $px_ma = $_POST['xa'];
+
+  // Thêm dữ liệu vào cơ sở dữ liệu
+  $sql_them = "INSERT INTO trambanle(t_ten,t_diachi,t_sdt,t_lat,t_long,ct_ma,l_ma,px_ma) VALUE('".$t_ten."','".$t_diachi."','".$t_sdt."','".$t_lat."','".$t_long."','".$ct_ma."','".$l_ma."','".$px_ma."')";
+  try {
+    if ($conn->query($sql_them) === TRUE) {
+        // Hiển thị thông báo khi sửa dữ liệu thành công
+        echo "<script>
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Thành công',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        </script>";
+    } else {
+        // Hiển thị thông báo khi sửa dữ liệu thất bại
+        echo "<script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'Không thể sửa dữ liệu',
+            })
+        </script>";
+    }
+    
+} catch (mysqli_sql_exception $e) {
+    // Hiển thị thông báo lỗi và ghi log lỗi
+    $errorMessage = "Lỗi truy vấn SQL: " . $e->getMessage();
+    error_log($errorMessage);
+    echo "<script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Lỗi',
+            text: 'Đã có lỗi xảy ra, vui lòng thử lại!!!',
+        })
+    </script>";
+}
+}
+
+?>
